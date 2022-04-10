@@ -80,8 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 games.clear();
 
                 for (DataSnapshot data : snapshot.getChildren()) {
-                    Game game_data = data.getValue(Game.class);
-                    games.add(game_data);
+                    games.add(data.getValue(Game.class));
                 }
 
                 progressBar.setVisibility(ProgressBar.GONE);
