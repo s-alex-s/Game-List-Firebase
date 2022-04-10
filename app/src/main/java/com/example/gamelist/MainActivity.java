@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -35,7 +36,10 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     GameListAdapter gameListAdapter;
     Intent intent;
+
     public final int OBJECT_ADD = 3;
+
+    ProgressBar progressBar;
 
     ActivityResultLauncher<Intent> activityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -63,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         listView = findViewById(R.id.game_list);
+        progressBar = findViewById(R.id.progressBar3);
+
         games = new ArrayList<>();
         gameListAdapter = new GameListAdapter(this, games);
         listView.setAdapter(gameListAdapter);
@@ -76,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
                     Game game_data = data.getValue(Game.class);
                     games.add(game_data);
                 }
+
+                progressBar.setVisibility(ProgressBar.GONE);
                 gameListAdapter.notifyDataSetChanged();
             }
 
