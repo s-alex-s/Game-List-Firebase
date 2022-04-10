@@ -30,7 +30,7 @@ import classes.Game;
 public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference db_ref = database.getReference();
-    DatabaseReference push_game = db_ref.child("Games").push();
+    DatabaseReference push;
 
     ArrayList<Game> games;
     ListView listView;
@@ -53,8 +53,9 @@ public class MainActivity extends AppCompatActivity {
                         String genre = result.getData().getStringExtra("genre");
 
                         Game g = new Game(name, date, genre);
-                        g.setKey(push_game.getKey());
-                        push_game.setValue(g);
+                        push = db_ref.child("Games").push();
+                        g.setKey(push.getKey());
+                        push.setValue(g);
                     }
                 }
             }
