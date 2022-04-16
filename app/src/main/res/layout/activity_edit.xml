@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddItemActivity">
+    tools:context=".EditActivity">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -16,44 +16,54 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:id="@+id/name"
+            android:id="@+id/edit_game_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
             android:minHeight="48dp"
-            android:text="Game name" />
+            android:text="Game name"
+            android:autofillHints="" />
 
         <EditText
-            android:id="@+id/date"
+            android:id="@+id/edit_game_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
             android:minHeight="48dp"
-            android:text="Game date" />
+            android:text="Game date"
+            android:autofillHints="" />
 
         <EditText
-            android:id="@+id/genre"
+            android:id="@+id/edit_game_genre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
             android:minHeight="48dp"
-            android:text="Game genre" />
+            android:text="Game genre"
+            android:autofillHints="" />
 
         <Button
-            android:id="@+id/button_save"
+            android:id="@+id/edit_game_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="clicked"
+            android:onClick="clicked_save"
             android:text="Save" />
 
         <Button
-            android:id="@+id/button_cancel"
+            android:id="@+id/edit_game_del"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="cancel"
+            android:onClick="clicked_delete"
+            android:text="Delete" />
+
+        <Button
+            android:id="@+id/edit_game_b_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="clicked_cancel"
             android:text="Cancel" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

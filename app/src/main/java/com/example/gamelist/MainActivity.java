@@ -1,20 +1,22 @@
 package com.example.gamelist;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     Intent intent;
 
     public final int OBJECT_ADD = 3;
+    public final int OBJECT_EDIT = 4;
+    public final int OBJECT_DELETE = 5;
 
     ProgressBar progressBar;
 
@@ -47,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == OBJECT_ADD) {
+                        games.clear();
+                        gameListAdapter.notifyDataSetChanged();
+                        progressBar.setVisibility(View.VISIBLE);
+
                         assert result.getData() != null;
                         String name = result.getData().getStringExtra("name");
                         int date = Integer.parseInt(result.getData().getStringExtra("date"));
@@ -56,6 +64,44 @@ public class MainActivity extends AppCompatActivity {
                         push = db_ref.child("Games").push();
                         g.setKey(push.getKey());
                         push.setValue(g);
+                    } else if (result.getResultCode() ==  OBJECT_EDIT) {
+                        games.clear();
+                        gameListAdapter.notifyDataSetChanged();
+                        progressBar.setVisibility(View.VISIBLE);
+
+                        assert result.getData() != null;
+                        Game game_obj = (Game) result.getData().getSerializableExtra("game_obj");
+
+                        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                db_ref.child("Games").child(game_obj.getKey()).setValue(game_obj);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(MainActivity.this, "Database error", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else if (result.getResultCode() == OBJECT_DELETE) {
+                        games.clear();
+                        gameListAdapter.notifyDataSetChanged();
+                        progressBar.setVisibility(View.VISIBLE);
+
+                        assert result.getData() != null;
+                        Game game_obj = (Game) result.getData().getSerializableExtra("game_obj");
+
+                        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                db_ref.child("Games").child(game_obj.getKey()).removeValue();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(MainActivity.this, "Database error", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 }
             }
@@ -74,6 +120,35 @@ public class MainActivity extends AppCompatActivity {
         gameListAdapter = new GameListAdapter(this, games);
         listView.setAdapter(gameListAdapter);
 
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                intent = new Intent(MainActivity.this, EditActivity.class);
+
+                db_ref.child("Games").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        intent.putExtra("game_obj", snapshot.child(view.getTag().toString()).getValue(Game.class));
+                        activityResult.launch(intent);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(MainActivity.this, "Database error", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                return true;
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(MainActivity.this, "Click", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         db_ref.child("Games").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -83,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                     games.add(data.getValue(Game.class));
                 }
 
-                progressBar.setVisibility(ProgressBar.GONE);
+                progressBar.setVisibility(View.GONE);
                 gameListAdapter.notifyDataSetChanged();
             }
 
@@ -106,9 +181,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.add_item_option) {
-            intent = new Intent(this, AddItemActivity.class);
-            intent.putExtra("action", "add");
-            activityResult.launch(intent);
+            activityResult.launch(new Intent(this, AddItemActivity.class));
         }
 
         return super.onOptionsItemSelected(item);

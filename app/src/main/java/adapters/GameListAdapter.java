@@ -28,6 +28,7 @@ public class GameListAdapter extends ArrayAdapter<Game> {
         this.games = games;
     }
 
+    @SuppressLint("SetTextI18n")
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
