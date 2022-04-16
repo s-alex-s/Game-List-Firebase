@@ -1,8 +1,10 @@
 package com.example.gamelist;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -80,11 +82,26 @@ public class EditActivity extends AppCompatActivity {
     }
 
     public void clicked_delete(View v) {
-        intent = new Intent();
-        intent.putExtra("game_obj", game_obj);
-        setResult(OBJECT_DELETE, intent);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Warning");
+        builder.setMessage("Delete game?");
 
-        finish();
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (i == DialogInterface.BUTTON_POSITIVE) {
+                    intent = new Intent();
+                    intent.putExtra("game_obj", game_obj);
+                    setResult(OBJECT_DELETE, intent);
+                    finish();
+                }
+            }
+        };
+
+        builder.setPositiveButton("Yes", listener);
+        builder.setNegativeButton("No", listener);
+
+        builder.create().show();
     }
 
     public void clicked_cancel(View v) {
