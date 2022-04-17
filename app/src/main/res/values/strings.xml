@@ -1,4 +1,11 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Game List</string>
-    <string name="add_item">Add item...</string>
+    <string name="add_item" tools:ignore="TypographyEllipsis">Add item...</string>
+    <string name="save_button">Save</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="delete_button">Delete</string>
+    <string name="game_name">Game name</string>
+    <string name="game_date">Game date</string>
+    <string name="game_genre">Game genre</string>
+    <string name="comment_text">Text</string>
 </resources>

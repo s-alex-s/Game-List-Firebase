@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
-                                Toast.makeText(MainActivity.this, "Database error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "Database error", Toast.LENGTH_LONG).show();
                             }
                         });
                     } else if (result.getResultCode() == OBJECT_DELETE) {
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
-                                Toast.makeText(MainActivity.this, "Database error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "Database error", Toast.LENGTH_LONG).show();
                             }
                         });
                     }
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         listView = findViewById(R.id.game_list);
-        progressBar = findViewById(R.id.progressBar3);
+        progressBar = findViewById(R.id.progressBar_main);
 
         games = new ArrayList<>();
         gameListAdapter = new GameListAdapter(this, games);
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(MainActivity.this, "Database error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Database error", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -145,7 +145,20 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(MainActivity.this, "Click", Toast.LENGTH_SHORT).show();
+                intent = new Intent(MainActivity.this, CommentActivity.class);
+
+                db_ref.child("Games").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        intent.putExtra("game_key", snapshot.child(view.getTag().toString()).getValue(Game.class).getKey());
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(MainActivity.this, "Database error", Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
 
@@ -165,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(MainActivity.this, "Database load error",
-                        Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_LONG).show();
             }
         });
     }

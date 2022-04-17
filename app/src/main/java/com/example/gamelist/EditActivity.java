@@ -68,14 +68,17 @@ public class EditActivity extends AppCompatActivity {
         }
 
         if (is_ok) {
-            intent = new Intent();
+            if (!(game_obj.getName().equals(sname) && Integer.toString(game_obj.getRelease_date()).equals(sdate)
+                    && game_obj.getGenre().equals(sgenre))) {
+                intent = new Intent();
 
-            game_obj.setName(sname);
-            game_obj.setRelease_date(Integer.parseInt(sdate));
-            game_obj.setGenre(sgenre);
+                game_obj.setName(sname);
+                game_obj.setRelease_date(Integer.parseInt(sdate));
+                game_obj.setGenre(sgenre);
 
-            intent.putExtra("game_obj", game_obj);
-            setResult(OBJECT_EDIT, intent);
+                intent.putExtra("game_obj", game_obj);
+                setResult(OBJECT_EDIT, intent);
+            }
 
             finish();
         }

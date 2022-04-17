@@ -19,51 +19,54 @@
             android:id="@+id/edit_game_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autofillHints=""
             android:ems="10"
+            android:hint="@string/game_name"
             android:inputType="textPersonName"
             android:minHeight="48dp"
-            android:text="Game name"
-            android:autofillHints="" />
+            android:textColorHint="#757575" />
 
         <EditText
             android:id="@+id/edit_game_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autofillHints=""
             android:ems="10"
-            android:inputType="textPersonName"
+            android:hint="@string/game_date"
+            android:inputType="date"
             android:minHeight="48dp"
-            android:text="Game date"
-            android:autofillHints="" />
+            android:textColorHint="#757575" />
 
         <EditText
             android:id="@+id/edit_game_genre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autofillHints=""
             android:ems="10"
+            android:hint="@string/game_genre"
             android:inputType="textPersonName"
             android:minHeight="48dp"
-            android:text="Game genre"
-            android:autofillHints="" />
+            android:textColorHint="#757575" />
 
         <Button
             android:id="@+id/edit_game_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="clicked_save"
-            android:text="Save" />
+            android:text="@string/save_button" />
 
         <Button
             android:id="@+id/edit_game_del"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="clicked_delete"
-            android:text="Delete" />
+            android:text="@string/delete_button" />
 
         <Button
             android:id="@+id/edit_game_b_cancel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="clicked_cancel"
-            android:text="Cancel" />
+            android:text="@string/cancel_button" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
