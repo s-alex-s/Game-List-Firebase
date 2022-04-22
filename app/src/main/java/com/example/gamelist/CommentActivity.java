@@ -3,7 +3,6 @@ package com.example.gamelist;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -28,7 +27,6 @@ public class CommentActivity extends AppCompatActivity {
     DatabaseReference comm_ref = database.getReference().child("Game_comments");
     DatabaseReference push;
 
-    Intent intent;
     ArrayList<Comment> comments;
     CommentListAdapter commentListAdapter;
     ListView listView;
@@ -53,7 +51,7 @@ public class CommentActivity extends AppCompatActivity {
 
         arguments = getIntent().getExtras();
 
-        comm_ref.orderByChild("game_key").equalTo(arguments.getString("game_key")).addValueEventListener(new ValueEventListener() {
+        comm_ref.child(arguments.getString("game_key")).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 comments.clear();
@@ -76,11 +74,10 @@ public class CommentActivity extends AppCompatActivity {
 
     public void clicked_save(View v) {
         if (!text.getText().toString().replace(" ", "").equals("")) {
-            push = comm_ref.push();
+            push = comm_ref.child(arguments.getString("game_key")).push();
 
             Comment comment = new Comment(text.getText().toString());
             comment.setKey(push.getKey());
-            comment.setGame_key(arguments.getString("game_key"));
 
             push.setValue(comment);
 

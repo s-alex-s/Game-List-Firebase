@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 db_ref.child("Games").child(game_obj.getKey()).removeValue();
+                                db_ref.child("Game_comments").child(game_obj.getKey()).removeValue();
                             }
 
                             @Override
