@@ -1,5 +1,6 @@
 package com.example.gamelist;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -25,9 +27,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import adapters.GameListAdapter;
+import classes.Auth;
 import classes.Game;
+import classes.User;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -38,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     GameListAdapter gameListAdapter;
     Intent intent;
+    TextView textView;
+
+    Auth auth;
+    User user;
 
     public final int OBJECT_ADD = 3;
     public final int OBJECT_EDIT = 4;
@@ -109,10 +118,35 @@ public class MainActivity extends AppCompatActivity {
     );
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        auth = new Auth(this);
+        if (auth.getUsername() == null) {
+            startActivity(new Intent(this, SignInActivity.class));
+            finish();
+        }
+        textView = findViewById(R.id.hello_user_main);
+
+        db_ref.child("Users").orderByChild("login").equalTo(auth.getUsername()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.hasChildren()) {
+                    user = snapshot.child(auth.getUsername()).getValue(User.class);
+                    assert user != null;
+                    auth.setUser(user.getLogin(), user);
+                    textView.setText("Hello, " + auth.getUser().getName());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         listView = findViewById(R.id.game_list);
         progressBar = findViewById(R.id.progressBar_main);
@@ -196,6 +230,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.add_item_option) {
             activityResult.launch(new Intent(this, AddItemActivity.class));
+        } else if (item.getItemId() == R.id.logout_option) {
+            auth.setUser(null, null);
+            intent = new Intent(this, SignInActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

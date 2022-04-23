@@ -2,9 +2,11 @@ package com.example.gamelist;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 public class AddItemActivity extends AppCompatActivity {
@@ -28,6 +30,8 @@ public class AddItemActivity extends AppCompatActivity {
     }
 
     public void clicked(View v) {
+        close_keyboard();
+
         String sname = name.getText().toString();
         String sdate = date.getText().toString();
         String sgenre = genre.getText().toString();
@@ -66,5 +70,13 @@ public class AddItemActivity extends AppCompatActivity {
 
     public void cancel(View v) {
         finish();
+    }
+
+    public void close_keyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }

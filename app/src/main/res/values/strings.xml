@@ -8,4 +8,10 @@
     <string name="game_date">Game date</string>
     <string name="game_genre">Game genre</string>
     <string name="comment_text">Text</string>
+    <string name="login">Login</string>
+    <string name="user_name">Name</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="sign_in">Sign in</string>
+    <string name="logout">logout</string>
 </resources>

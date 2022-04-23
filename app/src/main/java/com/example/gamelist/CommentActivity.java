@@ -3,8 +3,10 @@ package com.example.gamelist;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -73,6 +75,8 @@ public class CommentActivity extends AppCompatActivity {
     }
 
     public void clicked_save(View v) {
+        close_keyboard();
+
         if (!text.getText().toString().replace(" ", "").equals("")) {
             push = comm_ref.child(arguments.getString("game_key")).push();
 
@@ -89,5 +93,13 @@ public class CommentActivity extends AppCompatActivity {
 
     public void clicked_cancel(View v) {
         finish();
+    }
+
+    public void close_keyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }
