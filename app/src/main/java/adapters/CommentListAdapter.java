@@ -34,8 +34,8 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
         Comment comment = comments.get(position);
 
         LayoutInflater inflater = LayoutInflater.from(this.context);
-        @SuppressLint({"ViewHolder", "InflateParams"}) View v =
-                inflater.inflate(R.layout.item_comment, null, false);
+        @SuppressLint("ViewHolder") View v =
+                inflater.inflate(R.layout.item_comment, parent, false);
 
         TextView tvValue = v.findViewById(R.id.comment_value);
         tvValue.setText(comment.getValue());

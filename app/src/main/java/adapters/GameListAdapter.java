@@ -35,8 +35,8 @@ public class GameListAdapter extends ArrayAdapter<Game> {
         Game game = this.games.get(position);
 
         LayoutInflater inflater = LayoutInflater.from(this.context);
-        @SuppressLint({"ViewHolder", "InflateParams"}) View v =
-                inflater.inflate(R.layout.item_games, null, false);
+        @SuppressLint("ViewHolder") View v =
+                inflater.inflate(R.layout.item_games, parent, false);
 
         TextView tvName = v.findViewById(R.id.game_name);
         TextView tvDate = v.findViewById(R.id.game_date);
